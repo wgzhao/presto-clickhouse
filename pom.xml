@@ -2,40 +2,68 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
+    <!-- <parent>
         <groupId>io.prestosql</groupId>
-        <artifactId>presto-root</artifactId>
+        <artifactId>presto-root</artifactId> 
         <version>330</version>
-    </parent>
-
+    </parent> -->
+    <version>330</version>
+    <groupId>com.cfzq</groupId>
     <artifactId>presto-clickhouse</artifactId>
     <description>Presto - ClickHouse Connector</description>
-    <packaging>presto-plugin</packaging>
+    <packaging>jar</packaging>
 
     <properties>
-        <air.main.basedir>${project.parent.basedir}</air.main.basedir>
+        <dep.presto.version>331</dep.presto.version>
+        <dep.slice.version>0.21</dep.slice.version>
+        <dep.guava.version>18.0</dep.guava.version>
+        <dep.guice.version>4.2.3</dep.guice.version>
+        <dep.jackson.version>2.9.7</dep.jackson.version>
+        <dep.joda.version>2.9.6</dep.joda.version>
+        <dep.jol.version>0.2</dep.jol.version>
+        <dep.javax.inject.version>1</dep.javax.inject.version>
+        <air.check.skip-spotbugs>true</air.check.skip-spotbugs>
+        <air.check.skip-pmd>true</air.check.skip-pmd>
+        <air.check.skip-jacoco>true</air.check.skip-jacoco>
+
+        <air.java.version>1.8.0-161</air.java.version>
+        <air.maven.version>3.3.9</air.maven.version>
+
+        <dep.antlr.version>4.7.1</dep.antlr.version>
+        <dep.airlift.version>0.193</dep.airlift.version>
+        <dep.packaging.version>${dep.airlift.version}</dep.packaging.version>
+        <dep.aws-sdk.version>1.11.697</dep.aws-sdk.version>
+        <dep.okhttp.version>3.9.0</dep.okhttp.version>
+        <dep.jdbi3.version>3.4.0</dep.jdbi3.version>
+        <dep.drift.version>1.14</dep.drift.version>
+        <dep.tempto.version>173</dep.tempto.version>
+        <dep.gcs.version>2.0.0</dep.gcs.version>
+        <dep.errorprone.version>2.3.3</dep.errorprone.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>io.prestosql</groupId>
             <artifactId>presto-base-jdbc</artifactId>
+            <version>${dep.presto.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
+            <version>${dep.guava.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
+            <version>${dep.guice.version}</version>
         </dependency>
 
         <dependency>
             <groupId>ru.yandex.clickhouse</groupId>
             <artifactId>clickhouse-jdbc</artifactId>
-            <version>0.2</version>
+            <version>0.2.4</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -47,62 +75,84 @@
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
+            <version>${dep.javax.inject.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
+            <version>${dep.jackson.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
+            <version>${dep.jackson.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.airlift</groupId>
             <artifactId>json</artifactId>
+            <version>${dep.airlift.version}</version>
         </dependency>
 
         <!-- Presto SPI -->
         <dependency>
             <groupId>io.prestosql</groupId>
             <artifactId>presto-spi</artifactId>
+            <version>${dep.presto.version}</version>
             <scope>provided</scope>
+        </dependency>
+        
+        <!-- testing -->
+        <dependency>
+            <groupId>io.prestosql</groupId>
+            <artifactId>presto-testing</artifactId>
+            <version>${dep.presto.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.airlift</groupId>
             <artifactId>slice</artifactId>
+            <version>${dep.slice.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>io.airlift</groupId>
             <artifactId>log</artifactId>
+            <version>${dep.airlift.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
+            <version>${dep.jackson.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.openjdk.jol</groupId>
             <artifactId>jol-core</artifactId>
+            <version>${dep.jol.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
+            <version>${dep.joda.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
             <version>3.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <version>1.13.0</version>
         </dependency>
     </dependencies>
      <build>
@@ -123,6 +173,14 @@
                     </ignoredDependencies>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+                </plugin>
         </plugins>
     </build>
 </project>

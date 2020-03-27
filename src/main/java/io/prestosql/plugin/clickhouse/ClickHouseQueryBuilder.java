@@ -152,6 +152,7 @@ public class ClickHouseQueryBuilder
         }
 
         String query = sqlFunction.apply(sql.toString());
+
         PreparedStatement statement = client.getPreparedStatement(connection, query);
 
         for (int i = 0; i < accumulator.size(); i++) {

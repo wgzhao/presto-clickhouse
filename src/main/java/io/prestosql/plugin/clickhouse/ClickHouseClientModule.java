@@ -18,28 +18,51 @@ import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Scopes;
 import com.google.inject.Singleton;
+import io.airlift.log.Logger;
 import io.prestosql.plugin.jdbc.BaseJdbcConfig;
 import io.prestosql.plugin.jdbc.ConnectionFactory;
+import io.prestosql.plugin.jdbc.DecimalModule;
 import io.prestosql.plugin.jdbc.DriverConnectionFactory;
 import io.prestosql.plugin.jdbc.ForBaseJdbc;
 import io.prestosql.plugin.jdbc.JdbcClient;
 import io.prestosql.plugin.jdbc.credential.CredentialProvider;
 import ru.yandex.clickhouse.ClickHouseDriver;
 
+import java.sql.SQLException;
+import java.util.Properties;
+
+import static io.airlift.configuration.ConfigBinder.configBinder;
+
 public class ClickHouseClientModule
         implements Module
 {
+    private static final Logger log = Logger.get(ClickHouseClientModule.class);
+
     @Override
     public void configure(Binder binder)
     {
         binder.bind(JdbcClient.class).annotatedWith(ForBaseJdbc.class).to(ClickHouseClient.class).in(Scopes.SINGLETON);
+        configBinder(binder).bindConfig(BaseJdbcConfig.class);
+        configBinder(binder).bindConfig(ClickHouseConfig.class);
+        binder.install(new DecimalModule());
     }
 
     @Provides
     @Singleton
     @ForBaseJdbc
-    public ConnectionFactory getConnectionFactory(BaseJdbcConfig config, CredentialProvider credentialProvider)
+    public static ConnectionFactory createConnectionFactory(ClickHouseConfig config, CredentialProvider credentialProvider, ClickHouseConfig clickhouseConfig)
+            throws SQLException
     {
-        return new DriverConnectionFactory(new ClickHouseDriver(), config, credentialProvider);
+        Properties connectionProperties = new Properties();
+        connectionProperties.setProperty("user", config.getConnectionuser());
+        connectionProperties.setProperty("password", config.getConnectionpassword());
+        if (clickhouseConfig.getConnectionTimeout() != null) {
+            connectionProperties.setProperty("connectionTimeout", String.valueOf(clickhouseConfig.getConnectionTimeout().toMillis()));
+        }
+        return new DriverConnectionFactory(
+                new ClickHouseDriver(),
+                config.getConnectionUrl(),
+                connectionProperties,
+                credentialProvider);
     }
 }
