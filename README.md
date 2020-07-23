@@ -26,4 +26,5 @@ Create a dir inside plugin dir called ClickHouse. To make it easier you could co
     mvn clean install
     
 ## Building ClickHouse Driver
+
 ClickHouse Driver is not available in common repositories, so you will need to download it from ClickHouse and install manually in your repository.

@@ -446,12 +446,6 @@ public class ClickHouseClient
     }
 
     @Override
-    protected Optional<BiFunction<String, Long, String>> limitFunction()
-    {
-        return Optional.of((sql, limit) -> sql + " LIMIT " + limit);
-    }
-
-    @Override
     public void dropTable(JdbcIdentity identity, JdbcTableHandle handle)
     {
         String sql = "DROP TABLE " + quoted(null, handle.getSchemaName(), handle.getTableName());
@@ -476,11 +470,17 @@ public class ClickHouseClient
                 join(",", nCopies(handle.getColumnNames().size(), "?")));
     }
 
-    // @Override
-    // public boolean isLimitGuaranteed()
-    // {
-    //     return true;
-    // }
+    @Override
+    protected Optional<BiFunction<String, Long, String>> limitFunction()
+    {
+        return Optional.of((sql, limit) -> sql + " LIMIT " + limit);
+    }
+
+    @Override
+    public boolean isLimitGuaranteed(ConnectorSession session)
+    {
+        return true;
+    }
 
     private ColumnMapping jsonColumnMapping()
     {

@@ -16,7 +16,7 @@
     <properties>
         <dep.presto.version>338</dep.presto.version>
         <dep.slice.version>0.21</dep.slice.version>
-        <dep.guava.version>18.0</dep.guava.version>
+        <dep.guava.version>29.0-jre</dep.guava.version>
         <dep.guice.version>4.2.3</dep.guice.version>
         <dep.jackson.version>2.9.7</dep.jackson.version>
         <dep.joda.version>2.9.6</dep.joda.version>
@@ -181,7 +181,18 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
-                </plugin>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>
+                            jar-with-dependencies
+                        </descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
