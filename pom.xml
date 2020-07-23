@@ -7,14 +7,14 @@
         <artifactId>presto-root</artifactId> 
         <version>330</version>
     </parent> -->
-    <version>330</version>
+    <version>338</version>
     <groupId>com.cfzq</groupId>
     <artifactId>presto-clickhouse</artifactId>
     <description>Presto - ClickHouse Connector</description>
     <packaging>jar</packaging>
 
     <properties>
-        <dep.presto.version>331</dep.presto.version>
+        <dep.presto.version>338</dep.presto.version>
         <dep.slice.version>0.21</dep.slice.version>
         <dep.guava.version>18.0</dep.guava.version>
         <dep.guice.version>4.2.3</dep.guice.version>
@@ -26,7 +26,7 @@
         <air.check.skip-pmd>true</air.check.skip-pmd>
         <air.check.skip-jacoco>true</air.check.skip-jacoco>
 
-        <air.java.version>1.8.0-161</air.java.version>
+        <!-- <air.java.version>1.8.0-161</air.java.version> -->
         <air.maven.version>3.3.9</air.maven.version>
 
         <dep.antlr.version>4.7.1</dep.antlr.version>
@@ -39,6 +39,7 @@
         <dep.tempto.version>173</dep.tempto.version>
         <dep.gcs.version>2.0.0</dep.gcs.version>
         <dep.errorprone.version>2.3.3</dep.errorprone.version>
+        <project.build.targetJdk>11</project.build.targetJdk>
     </properties>
 
     <dependencies>
