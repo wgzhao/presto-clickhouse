@@ -31,7 +31,6 @@ import io.prestosql.plugin.jdbc.ConnectionFactory;
 import io.prestosql.plugin.jdbc.JdbcColumnHandle;
 import io.prestosql.plugin.jdbc.JdbcIdentity;
 import io.prestosql.plugin.jdbc.JdbcOutputTableHandle;
-import io.prestosql.plugin.jdbc.JdbcSplit;
 import io.prestosql.plugin.jdbc.JdbcTableHandle;
 import io.prestosql.plugin.jdbc.JdbcTypeHandle;
 import io.prestosql.plugin.jdbc.UnsupportedTypeHandling;
@@ -46,9 +45,7 @@ import io.prestosql.spi.type.StandardTypes;
 import io.prestosql.spi.type.Type;
 import io.prestosql.spi.type.TypeManager;
 import io.prestosql.spi.type.TypeSignature;
-import io.prestosql.spi.type.VarcharType;
 import ru.yandex.clickhouse.ClickHouseConnection;
-import ru.yandex.clickhouse.ClickHousePreparedStatement;
 import ru.yandex.clickhouse.except.ClickHouseErrorCode;
 
 import javax.inject.Inject;
@@ -58,12 +55,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -127,40 +122,10 @@ public class ClickHouseClient
     }
 
     @Override
-    protected Collection<String> listSchemas(Connection connection)
-    {
-        // for clickhouse, we need to list catalogs instead of schemas
-        try (ResultSet resultSet = connection.getMetaData().getCatalogs()) {
-            ImmutableSet.Builder<String> schemaNames = ImmutableSet.builder();
-            while (resultSet.next()) {
-                String schemaName = resultSet.getString("TABLE_CAT");
-                // skip internal schemas
-                if (!schemaName.equalsIgnoreCase("information_schema") && !schemaName.equalsIgnoreCase("clickhouse")) {
-                    schemaNames.add(schemaName);
-                }
-            }
-            return schemaNames.build();
-        }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
     public void abortReadConnection(Connection connection)
             throws SQLException
     {
-        // Abort connection before closing. Without this, the clickhouse driver
-        // attempts to drain the connection by reading all the results.
         connection.abort(directExecutor());
-    }
-
-    @Override
-    public ClickHousePreparedStatement getPreparedStatement(Connection connection, String sql)
-            throws SQLException
-    {
-        ClickHousePreparedStatement statement = (ClickHousePreparedStatement) connection.prepareStatement(sql);
-        return statement;
     }
 
     @Override
@@ -244,14 +209,6 @@ public class ClickHouseClient
     }
 
     @Override
-    protected String getTableSchemaName(ResultSet resultSet)
-            throws SQLException
-    {
-        // clickhouse uses catalogs instead of schemas
-        return resultSet.getString("TABLE_CAT");
-    }
-
-    @Override
     public Optional<ColumnMapping> toPrestoType(ConnectorSession session, Connection connection, JdbcTypeHandle typeHandle)
     {
         String jdbcTypeName = typeHandle.getJdbcTypeName()
@@ -318,7 +275,7 @@ public class ClickHouseClient
                             .setComment(comment)
                             .build());
                 }
-                if (!columnMapping.isPresent()) {
+                if (columnMapping.isEmpty()) {
                     UnsupportedTypeHandling unsupportedTypeHandling = getUnsupportedTypeHandling(session);
                     verify(unsupportedTypeHandling == IGNORE, "Unsupported type handling is set to %s, but toPrestoType() returned empty", unsupportedTypeHandling);
                 }
@@ -345,27 +302,27 @@ public class ClickHouseClient
             return WriteMapping.longMapping("datetime", timestampWriteFunctionUsingSqlTimestamp(session));
         }
         if (VARBINARY.equals(type)) {
-            return WriteMapping.sliceMapping("mediumblob", varbinaryWriteFunction());
+            return WriteMapping.sliceMapping("String", varbinaryWriteFunction());
         }
         if (isVarcharType(type)) {
-            VarcharType varcharType = (VarcharType) type;
-            String dataType;
-            if (varcharType.isUnbounded()) {
-                dataType = "longtext";
-            }
-            else if (varcharType.getBoundedLength() <= 255) {
-                dataType = "tinytext";
-            }
-            else if (varcharType.getBoundedLength() <= 65535) {
-                dataType = "text";
-            }
-            else if (varcharType.getBoundedLength() <= 16777215) {
-                dataType = "mediumtext";
-            }
-            else {
-                dataType = "longtext";
-            }
-            return WriteMapping.sliceMapping(dataType, varcharWriteFunction());
+            // VarcharType varcharType = (VarcharType) type;
+            // String dataType;
+            // if (varcharType.isUnbounded()) {
+            //     dataType = "longtext";
+            // }
+            // else if (varcharType.getBoundedLength() <= 255) {
+            //     dataType = "tinytext";
+            // }
+            // else if (varcharType.getBoundedLength() <= 65535) {
+            //     dataType = "text";
+            // }
+            // else if (varcharType.getBoundedLength() <= 16777215) {
+            //     dataType = "mediumtext";
+            // }
+            // else {
+            //     dataType = "longtext";
+            // }
+            return WriteMapping.sliceMapping("String", varcharWriteFunction());
         }
         return super.toWriteMapping(session, type);
     }
@@ -373,11 +330,14 @@ public class ClickHouseClient
     @Override
     public void createTable(ConnectorSession session, ConnectorTableMetadata tableMetadata)
     {
+        log.info("entering createTable.........");
+        Map<String, Object> props = tableMetadata.getProperties();
+        log.info("props: {}", props.toString());
         try {
             createTable(session, tableMetadata, tableMetadata.getTable().getTableName());
         }
         catch (SQLException e) {
-            boolean exists = ClickHouseErrorCode.TABLE_ALREADY_EXISTS.equals(e.getSQLState());
+            boolean exists = ClickHouseErrorCode.TABLE_ALREADY_EXISTS.toString().equals(e.getSQLState());
             throw new PrestoException(exists ? ALREADY_EXISTS : JDBC_ERROR, e);
         }
     }
@@ -399,28 +359,11 @@ public class ClickHouseClient
         }
         catch (SQLException e) {
             // clickhouse versions earlier than 8 do not support the above RENAME COLUMN syntax
-            if (ClickHouseErrorCode.UNKNOWN_EXCEPTION.equals(e.getSQLState())) {
+            if (ClickHouseErrorCode.UNKNOWN_EXCEPTION.toString().equals(e.getSQLState())) {
                 throw new PrestoException(NOT_SUPPORTED, format("Rename column not supported in catalog: '%s'", handle.getCatalogName()), e);
             }
             throw new PrestoException(JDBC_ERROR, e);
         }
-    }
-
-    @Override
-    public PreparedStatement buildSql(ConnectorSession session, Connection connection, JdbcSplit split, JdbcTableHandle table, List<JdbcColumnHandle> columns)
-            throws SQLException
-    {
-        return new ClickHouseQueryBuilder(identifierQuote).buildSql(
-                this,
-                session,
-                connection,
-                table.getCatalogName(),
-                table.getSchemaName(),
-                table.getTableName(),
-                columns,
-                table.getConstraint(),
-                split.getAdditionalPredicate(),
-                tryApplyLimit(table.getLimit()));
     }
 
     @Override
@@ -518,5 +461,10 @@ public class ClickHouseClient
         // Jackson tries to detect the character encoding automatically when using InputStream
         // so we pass an InputStreamReader instead.
         return JSON_FACTORY.createParser(new InputStreamReader(json.getInput(), UTF_8));
+    }
+
+    public void execute(ConnectorSession session, String statement)
+    {
+        execute(JdbcIdentity.from(session), statement);
     }
 }

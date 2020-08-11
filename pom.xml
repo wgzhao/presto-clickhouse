@@ -4,13 +4,8 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- <parent>
-        <groupId>io.prestosql</groupId>
-        <artifactId>presto-root</artifactId> 
-        <version>330</version>
-    </parent> -->
     <version>338</version>
-    <groupId>com.cfzq</groupId>
+    <groupId>io.prestosql</groupId>
     <artifactId>presto-clickhouse</artifactId>
     <description>Presto - ClickHouse Connector</description>
     <packaging>jar</packaging>
