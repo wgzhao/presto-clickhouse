@@ -11,9 +11,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.trino.plugin.clickhouse;
+package io.prestosql.plugin.clickhouse;
 
-import io.trino.testing.sql.SqlExecutor;
+import io.prestosql.testing.sql.SqlExecutor;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

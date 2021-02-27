@@ -11,12 +11,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.trino.plugin.clickhouse;
+package io.prestosql.plugin.clickhouse;
 
 import com.google.common.collect.ImmutableMap;
-import io.trino.spi.Plugin;
-import io.trino.spi.connector.ConnectorFactory;
-import io.trino.testing.TestingConnectorContext;
+import io.prestosql.spi.Plugin;
+import io.prestosql.spi.connector.ConnectorFactory;
+import io.prestosql.testing.TestingConnectorContext;
 import org.testng.annotations.Test;
 
 import static com.google.common.collect.Iterables.getOnlyElement;

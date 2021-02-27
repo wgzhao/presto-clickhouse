@@ -11,11 +11,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.trino.plugin.clickhouse;
+package io.prestosql.plugin.clickhouse;
 
 import com.google.common.collect.ImmutableList;
-import io.trino.plugin.jdbc.TablePropertiesProvider;
-import io.trino.spi.session.PropertyMetadata;
+import io.prestosql.plugin.jdbc.TablePropertiesProvider;
+import io.prestosql.spi.session.PropertyMetadata;
 
 import javax.inject.Inject;
 
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static io.trino.spi.session.PropertyMetadata.stringProperty;
+import static io.prestosql.spi.session.PropertyMetadata.stringProperty;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -51,16 +51,17 @@ public final class ClickHouseTableProperties
                         false));
     }
 
-    public static Optional<String> getEngine(Map<String, Object> tableProperties)
-    {
-        requireNonNull(tableProperties);
-
-        return Optional.ofNullable(tableProperties.get(ENGINE_PROPERTY)).map(String.class::cast);
-    }
-
     @Override
     public List<PropertyMetadata<?>> getTableProperties()
     {
         return tableProperties;
+    }
+
+    public static Optional<String> getEngine(Map<String, Object> tableProperties)
+    {
+        requireNonNull(tableProperties);
+
+        String value = (String) tableProperties.get(ENGINE_PROPERTY);
+        return Optional.ofNullable(value);
     }
 }

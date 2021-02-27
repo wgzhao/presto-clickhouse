@@ -11,21 +11,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.trino.plugin.clickhouse;
+package io.prestosql.plugin.clickhouse;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import io.trino.Session;
-import io.trino.spi.type.TimeZoneKey;
-import io.trino.testing.AbstractTestQueryFramework;
-import io.trino.testing.QueryRunner;
-import io.trino.testing.datatype.CreateAndInsertDataSetup;
-import io.trino.testing.datatype.CreateAsSelectDataSetup;
-import io.trino.testing.datatype.DataSetup;
-import io.trino.testing.datatype.DataTypeTest;
-import io.trino.testing.datatype.SqlDataTypeTest;
-import io.trino.testing.sql.JdbcSqlExecutor;
-import io.trino.testing.sql.TrinoSqlExecutor;
+import io.prestosql.Session;
+import io.prestosql.spi.type.TimeZoneKey;
+import io.prestosql.testing.AbstractTestQueryFramework;
+import io.prestosql.testing.QueryRunner;
+import io.prestosql.testing.datatype.CreateAndInsertDataSetup;
+import io.prestosql.testing.datatype.CreateAsSelectDataSetup;
+import io.prestosql.testing.datatype.DataSetup;
+import io.prestosql.testing.datatype.DataTypeTest;
+import io.prestosql.testing.datatype.SqlDataTypeTest;
+import io.prestosql.testing.sql.JdbcSqlExecutor;
+import io.prestosql.testing.sql.PrestoSqlExecutor;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
@@ -36,17 +36,16 @@ import java.time.ZoneId;
 
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Verify.verify;
-import static io.trino.plugin.clickhouse.ClickHouseQueryRunner.createClickHouseQueryRunner;
-import static io.trino.spi.type.TimeZoneKey.UTC_KEY;
-import static io.trino.spi.type.VarcharType.createUnboundedVarcharType;
-import static io.trino.testing.datatype.DataType.bigintDataType;
-import static io.trino.testing.datatype.DataType.dateDataType;
-import static io.trino.testing.datatype.DataType.decimalDataType;
-import static io.trino.testing.datatype.DataType.doubleDataType;
-import static io.trino.testing.datatype.DataType.integerDataType;
-import static io.trino.testing.datatype.DataType.realDataType;
-import static io.trino.testing.datatype.DataType.smallintDataType;
-import static io.trino.testing.datatype.DataType.tinyintDataType;
+import static io.prestosql.spi.type.TimeZoneKey.UTC_KEY;
+import static io.prestosql.spi.type.VarcharType.createUnboundedVarcharType;
+import static io.prestosql.testing.datatype.DataType.bigintDataType;
+import static io.prestosql.testing.datatype.DataType.dateDataType;
+import static io.prestosql.testing.datatype.DataType.decimalDataType;
+import static io.prestosql.testing.datatype.DataType.doubleDataType;
+import static io.prestosql.testing.datatype.DataType.integerDataType;
+import static io.prestosql.testing.datatype.DataType.realDataType;
+import static io.prestosql.testing.datatype.DataType.smallintDataType;
+import static io.prestosql.testing.datatype.DataType.tinyintDataType;
 
 public class TestClickHouseTypeMapping
         extends AbstractTestQueryFramework
@@ -73,7 +72,7 @@ public class TestClickHouseTypeMapping
             throws Exception
     {
         clickhouseServer = new TestingClickHouseServer();
-        return createClickHouseQueryRunner(clickhouseServer, ImmutableMap.of(),
+        return ClickHouseQueryRunner.createClickHouseQueryRunner(clickhouseServer, ImmutableMap.of(),
                 ImmutableMap.<String, String>builder()
                         .put("metadata.cache-ttl", "10m")
                         .put("metadata.cache-missing", "true")
@@ -244,7 +243,7 @@ public class TestClickHouseTypeMapping
 
     private DataSetup trinoCreateAsSelect(Session session, String tableNamePrefix)
     {
-        return new CreateAsSelectDataSetup(new TrinoSqlExecutor(getQueryRunner(), session), tableNamePrefix);
+        return new CreateAsSelectDataSetup(new PrestoSqlExecutor(getQueryRunner(), session), tableNamePrefix);
     }
 
     private DataSetup clickhouseCreateAndInsert(String tableNamePrefix)

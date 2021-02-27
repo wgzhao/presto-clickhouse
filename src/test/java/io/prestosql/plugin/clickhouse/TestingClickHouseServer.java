@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.trino.plugin.clickhouse;
+package io.prestosql.plugin.clickhouse;
 
 import org.testcontainers.containers.ClickHouseContainer;
 

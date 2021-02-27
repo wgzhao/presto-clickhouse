@@ -2,11 +2,11 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.trino</groupId>
-    <artifactId>trino-clickhouse</artifactId>
-    <name>trino-clickhouse</name>
-    <version>352</version>
-    <description>Trino - ClickHouse Connector</description>
+    <groupId>io.prestosql</groupId>
+    <artifactId>presto-clickhouse</artifactId>
+    <name>presto-clickhouse</name>
+    <version>350</version>
+    <description>PrestoSQL - ClickHouse Connector</description>
     <packaging>jar</packaging>
 
     <properties>
@@ -24,8 +24,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.trino</groupId>
-            <artifactId>trino-base-jdbc</artifactId>
+            <groupId>io.prestosql</groupId>
+            <artifactId>presto-base-jdbc</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -83,8 +83,8 @@
 
         <!-- Trino SPI -->
         <dependency>
-            <groupId>io.trino</groupId>
-            <artifactId>trino-spi</artifactId>
+            <groupId>io.prestosql</groupId>
+            <artifactId>presto-spi</artifactId>
             <scope>provided</scope>
             <version>${project.version}</version>
         </dependency>
@@ -112,30 +112,30 @@
 
         <!-- for testing -->
         <dependency>
-            <groupId>io.trino</groupId>
-            <artifactId>trino-main</artifactId>
+            <groupId>io.prestosql</groupId>
+            <artifactId>presto-main</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>io.trino</groupId>
-            <artifactId>trino-main</artifactId>
+            <groupId>io.prestosql</groupId>
+            <artifactId>presto-main</artifactId>
             <version>${project.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>io.trino</groupId>
-            <artifactId>trino-testing</artifactId>
+            <groupId>io.prestosql</groupId>
+            <artifactId>presto-testing</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>io.trino</groupId>
-            <artifactId>trino-tpch</artifactId>
+            <groupId>io.prestosql</groupId>
+            <artifactId>presto-tpch</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
@@ -268,7 +268,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <finalName>trino-clickhouse-${project.version}</finalName>
+                    <finalName>presto-clickhouse-${project.version}</finalName>
                     <descriptors>
                         <descriptor>package.xml</descriptor>
                     </descriptors>

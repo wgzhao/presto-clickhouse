@@ -11,18 +11,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.trino.plugin.clickhouse;
+package io.prestosql.plugin.clickhouse;
 
 import com.google.common.collect.ImmutableMap;
-import io.trino.testing.AbstractTestDistributedQueries;
-import io.trino.testing.QueryRunner;
-import io.trino.testing.sql.JdbcSqlExecutor;
-import io.trino.testing.sql.TestTable;
-import io.trino.tpch.TpchTable;
+import io.prestosql.testing.AbstractTestDistributedQueries;
+import io.prestosql.testing.QueryRunner;
+import io.prestosql.testing.sql.JdbcSqlExecutor;
+import io.prestosql.testing.sql.TestTable;
+import io.prestosql.tpch.TpchTable;
 import org.testng.SkipException;
 import org.testng.annotations.Test;
 
-import static io.trino.plugin.clickhouse.ClickHouseQueryRunner.createClickHouseQueryRunner;
+import static io.prestosql.plugin.clickhouse.ClickHouseQueryRunner.createClickHouseQueryRunner;
 
 @Test
 public class TestClickHouseDistributedQueries
@@ -36,7 +36,7 @@ public class TestClickHouseDistributedQueries
     {
         this.clickhouseServer = closeAfterClass(new TestingClickHouseServer());
         // caching here speeds up tests highly, caching is not used in smoke tests
-        return createClickHouseQueryRunner(clickhouseServer, ImmutableMap.of(), ImmutableMap.<String, String>builder()
+        return ClickHouseQueryRunner.createClickHouseQueryRunner(clickhouseServer, ImmutableMap.of(), ImmutableMap.<String, String>builder()
                 .put("metadata.cache-ttl", "10m")
                 .put("metadata.cache-missing", "true")
                 .put("allow-drop-table", "true")

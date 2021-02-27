@@ -19,7 +19,7 @@
         <fileSet>
             <directory>src/main/resources</directory>
             <includes>
-                <include>trino-clickhouse-services.jar</include>
+                <include>presto-clickhouse-services.jar</include>
             </includes>
             <fileMode>0644</fileMode>
             <outputDirectory>clickhouse/</outputDirectory>
