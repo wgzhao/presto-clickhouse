@@ -15,6 +15,7 @@
         <dep.errorprone.version>2.5.1</dep.errorprone.version>
         <dep.antlr.version>4.9</dep.antlr.version>
         <dep.drift.version>1.14</dep.drift.version>
+        <dep.testng.version>7.3.0</dep.testng.version>
         <project.build.targetJdk>(11,]</project.build.targetJdk>
         <project.sourceEncoding>UTF-8</project.sourceEncoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -192,7 +193,7 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>7.2.0</version>
+            <version>${dep.testng.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -268,7 +269,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <finalName>${artifactId}-${project.version}</finalName>
+                    <finalName>${project.artifactId}-${project.version}</finalName>
                     <descriptors>
                         <descriptor>package.xml</descriptor>
                     </descriptors>
