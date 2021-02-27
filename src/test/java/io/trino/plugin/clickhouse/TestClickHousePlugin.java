@@ -11,12 +11,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.plugin.clickhouse;
+package io.trino.plugin.clickhouse;
 
 import com.google.common.collect.ImmutableMap;
-import io.prestosql.spi.Plugin;
-import io.prestosql.spi.connector.ConnectorFactory;
-import io.prestosql.testing.TestingConnectorContext;
+import io.trino.spi.Plugin;
+import io.trino.spi.connector.ConnectorFactory;
+import io.trino.testing.TestingConnectorContext;
 import org.testng.annotations.Test;
 
 import static com.google.common.collect.Iterables.getOnlyElement;
@@ -28,6 +28,6 @@ public class TestClickHousePlugin
     {
         Plugin plugin = new ClickHousePlugin();
         ConnectorFactory factory = getOnlyElement(plugin.getConnectorFactories());
-        factory.create("test", ImmutableMap.of("connection-url", "jdbc:presto://test"), new TestingConnectorContext());
+        factory.create("test", ImmutableMap.of("connection-url", "jdbc:clickhouse://test"), new TestingConnectorContext());
     }
 }

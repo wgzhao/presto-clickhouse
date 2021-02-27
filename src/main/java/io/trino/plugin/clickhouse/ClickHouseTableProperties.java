@@ -11,17 +11,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.plugin.clickhouse;
+package io.trino.plugin.clickhouse;
 
 import com.google.common.collect.ImmutableList;
-import io.prestosql.spi.session.PropertyMetadata;
+import io.trino.plugin.jdbc.TablePropertiesProvider;
+import io.trino.spi.session.PropertyMetadata;
 
 import javax.inject.Inject;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-import static io.prestosql.spi.session.PropertyMetadata.stringProperty;
+import static io.trino.spi.session.PropertyMetadata.stringProperty;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Class contains all table properties for the Clickhouse connector. Used when creating a table:
@@ -30,6 +33,7 @@ import static io.prestosql.spi.session.PropertyMetadata.stringProperty;
  * </p>
  */
 public final class ClickHouseTableProperties
+        implements TablePropertiesProvider
 {
     public static final String ENGINE_PROPERTY = "engine";
     public static final String DEFAULT_TABLE_ENGINE = "Log";
@@ -47,13 +51,16 @@ public final class ClickHouseTableProperties
                         false));
     }
 
+    public static Optional<String> getEngine(Map<String, Object> tableProperties)
+    {
+        requireNonNull(tableProperties);
+
+        return Optional.ofNullable(tableProperties.get(ENGINE_PROPERTY)).map(String.class::cast);
+    }
+
+    @Override
     public List<PropertyMetadata<?>> getTableProperties()
     {
         return tableProperties;
-    }
-
-    public static String getEngine(Map<String, Object> tableProperties)
-    {
-        return (String) tableProperties.get(DEFAULT_TABLE_ENGINE);
     }
 }

@@ -11,9 +11,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.prestosql.plugin.clickhouse;
+package io.trino.plugin.clickhouse;
 
-import io.prestosql.plugin.jdbc.JdbcPlugin;
+import io.trino.plugin.jdbc.JdbcPlugin;
 
 public class ClickHousePlugin
         extends JdbcPlugin
