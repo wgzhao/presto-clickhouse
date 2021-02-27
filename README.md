@@ -1,8 +1,8 @@
 # Trino ClickHouse Connector
 
-This is a plugin for Trino that allow you to use ClickHouse Jdbc Connection
+This is a connector for [Trino](https://trino.io) that allow you to query [ClickHouse](https://clickhouse.tech) database with trino.
 
-[![Trino-Connectors Member](https://img.shields.io/badge/trino--connectors-member-green.svg)](https://trino.io)
+[![Trino Connectors Member](https://img.shields.io/badge/trino--connectors-member-green.svg)](https://trino.io)
 
 ## quick started
 
@@ -16,10 +16,12 @@ unzip -q -o /tmp/trino-clickhouse-352.zip -d /usr/lib/trino/plugin
 
 Once this is done, you can activate the clickhouse plugin by executing `/etc/init.d/trino restart`
 
+
 ## compile and installation
 
 ```shell
 git clone -b trino-352 https://github.com/wgzhao/presto-clickhouse`
+cd presto-clickhouse
 mvn clean package assembly:single -DskipTests 
 ```
 
