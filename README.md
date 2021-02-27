@@ -1,27 +1,30 @@
-# Presto ClickHouse Connector
+# PrestoSQL ClickHouse Connector
 
-This is a plugin for earlier [PrestoSQL](https://github.com/trinodb/trino/tree/350) that allow you to use ClickHouse Jdbc Connection
+This is a plugin for [PrestoSQL](https://trino.io) that allow you to use ClickHouse Jdbc Connection
+
+[![Presto-Connectors Member](https://img.shields.io/badge/presto--connectors-member-green.svg)](https://trino.io)
 
 ## quick started
 
-## compile and installation
-
-### get source code
-
-`git clone -b prestosql-350 https://github.com/wgzhao/presto-clickhouse `
-
-
-### compile
+You can execute the following instructions to get `presto-clickhouse` plugin
 
 ```shell
+wget -O /tmp/presto-clickhouse-352.zip \
+ https://github.com/wgzhao/presto-clickhouse/releases/download/350/presto-clickhouse-350.zip
+unzip -q -o /tmp/presto-clickhouse-352.zip -d /usr/lib/presto/plugin
+```
+
+Once this is done, you can activate the clickhouse plugin by executing `/etc/init.d/trino restart`
+
+## compile and installation
+
+```shell
+git clone -b prestosql-350 https://github.com/wgzhao/presto-clickhouse`
 mvn clean package assembly:single -DskipTests 
 ```
 
-After compiling, you can get a zip file in target folder
-
-## installation 
-
-unpack the zip file into your prestosql plugin folder
+After compiling, you can get a zip file in target folder,
+unpack the zip file into your presto plugin folder
 
 ```shell
 unzip target/presto-clickhouse-350.zip -d /usr/lib/presto/plugin 

@@ -268,7 +268,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <finalName>presto-clickhouse-${project.version}</finalName>
+                    <finalName>${artifactId}-${project.version}</finalName>
                     <descriptors>
                         <descriptor>package.xml</descriptor>
                     </descriptors>
