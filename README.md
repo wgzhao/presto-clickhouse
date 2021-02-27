@@ -2,39 +2,32 @@
 
 This is a plugin for Trino that allow you to use ClickHouse Jdbc Connection
 
-[![Trino-Connectors Member](https://img.shields.io/badge/presto--connectors-member-green.svg)](http://presto-connectors.ml)
+[![Trino-Connectors Member](https://img.shields.io/badge/trino--connectors-member-green.svg)](https://trino.io)
+
+## quick started
+
+You can execute the following instructions to get `trino-clickhouse` plugin
+
+```shell
+wget -O /tmp/trino-clickhouse-352.zip \
+ https://github.com/wgzhao/presto-clickhouse/releases/download/352/trino-clickhouse-352.zip
+unzip -q -o /tmp/trino-clickhouse-352.zip -d /usr/lib/trino/plugin
+```
+
+Once this is done, you can activate the clickhouse plugin by executing `/etc/init.d/trino restart`
 
 ## compile and installation
 
-### get source code
-
-`git clone https://github.com/wgzhao/presto-clickhouse`
-   
-### Switching to the appropriate branch
-
-Switch to the branch corresponding to your trino or prestosql version: 
-for example, if you have trino version 352, switch to `trino-352`, if you have prestosql version 348,
-switch to `prestosql-348`
-
 ```shell
-cd presto-clickhouse
-git checkout trino-352
-```
-
-### compile
-
-```shell
+git clone -b trino-352 https://github.com/wgzhao/presto-clickhouse`
 mvn clean package assembly:single -DskipTests 
 ```
 
-After compiling, you can get a zip file in target folder
-
-## installation 
-
-unpack the zip file into your trino/prestosql plugin folder
+After compiling, you can get a zip file in target folder,
+unpack the zip file into your trino plugin folder
 
 ```shell
-unzip target/trino-clickhouse-<version>.zip -d /usr/lib/trino/plugin 
+unzip target/trino-clickhouse-352.zip -d /usr/lib/trino/plugin 
 ```
 
 ## Connection Configuration
