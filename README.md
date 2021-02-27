@@ -1,8 +1,8 @@
 # PrestoSQL ClickHouse Connector
 
-This is a plugin for [PrestoSQL](https://trino.io) that allow you to use ClickHouse Jdbc Connection
+This is a connector for [PrestoSQL](https://trino.io) that allow you to query [ClickHouse](https://clickhouse.tech) database with PrestoSQL.
 
-[![Presto-Connectors Member](https://img.shields.io/badge/presto--connectors-member-green.svg)](https://trino.io)
+[![Presto Connectors Member](https://img.shields.io/badge/presto--connectors-member-green.svg)](https://trino.io)
 
 ## quick started
 
@@ -20,6 +20,7 @@ Once this is done, you can activate the clickhouse plugin by executing `/etc/ini
 
 ```shell
 git clone -b prestosql-350 https://github.com/wgzhao/presto-clickhouse`
+cd presto-clickhouse
 mvn clean package assembly:single -DskipTests 
 ```
 
@@ -32,7 +33,7 @@ unzip target/presto-clickhouse-350.zip -d /usr/lib/presto/plugin
 
 ## Connection Configuration
 
-Create new properties file inside etc/catalog dir:
+Create new properties file inside `etc/catalog` dir:
 
 ```ini
 connector.name=clickhouse
