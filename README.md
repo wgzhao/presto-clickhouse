@@ -1,6 +1,9 @@
 # Trino/PrestoSQL ClickHouse Connector
 
-The repo has [merged into offical repo](https://github.com/trinodb/trino/pulls/4909), It will be ship on since version 353.
+<h2>
+ The repo is not being updated because it has been merged into the official code repository(https://github.com/trinodb/trino/pulls/4909)
+</h2>. It will be ship on since version 353.
+
 
 If you are using version 350 or earlier (PrestoSQL), you can get it working by executing the following code:
 
