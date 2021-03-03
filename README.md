@@ -1,40 +1,21 @@
-# Trino ClickHouse Connector
+# Trino/PrestoSQL ClickHouse Connector
 
-This is a plugin for Trino that allow you to use ClickHouse Jdbc Connection
+The repo has [merged into offical repo](https://github.com/trinodb/trino/pulls/4909), It will be ship on since version 353.
 
-[![Trino-Connectors Member](https://img.shields.io/badge/presto--connectors-member-green.svg)](http://presto-connectors.ml)
-
-## compile and installation
-
-### get source code
-
-`git clone https://github.com/wgzhao/presto-clickhouse`
-   
-### Switching to the appropriate branch
-
-Switch to the branch corresponding to your trino or prestosql version: 
-for example, if you have trino version 352, switch to `trino-352`, if you have prestosql version 348,
-switch to `prestosql-348`
+If you are using version 350 or earlier (PrestoSQL), you can get it working by executing the following code:
 
 ```shell
-cd presto-clickhouse
-git checkout trino-352
+wget -O /tmp/presto-clickhouse-352.zip \
+ https://github.com/wgzhao/presto-clickhouse/releases/download/350/presto-clickhouse-350.zip
+unzip -q -o /tmp/presto-clickhouse-352.zip -d /usr/lib/presto/plugin
 ```
 
-### compile
+If you are using version 352 (Trino), you can get it working by executing the following code:
 
 ```shell
-mvn clean package assembly:single -DskipTests 
-```
-
-After compiling, you can get a zip file in target folder
-
-## installation 
-
-unpack the zip file into your trino/prestosql plugin folder
-
-```shell
-unzip target/trino-clickhouse-<version>.zip -d /usr/lib/trino/plugin 
+wget -O /tmp/trino-clickhouse-352.zip \
+ https://github.com/wgzhao/presto-clickhouse/releases/download/352/trino-clickhouse-352.zip
+unzip -q -o /tmp/trino-clickhouse-352.zip -d /usr/lib/trino/plugin
 ```
 
 ## Connection Configuration
@@ -48,4 +29,4 @@ connection-user=myuser
 connection-password=
 ```
 
-your can get detailed in the [documentation](clickhouse.md).
+your can get detailed in the [documentation](https://github.com/trinodb/trino/blob/master/docs/src/main/sphinx/connector/clickhouse.rst).
